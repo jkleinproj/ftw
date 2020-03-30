@@ -1,10 +1,11 @@
 # ftw
 
-A Clojure library designed to ... well, that part is up to you.
+FTW (For the Win) is a project by Jack Klein and Michael Bakshandeh created with the goal of predicting the top of the
+PGA Tour's season-long money list using Clojure and a Genetic Programming-based algorithm. 
 
 ## Usage
 
-FIXME
+TBD re: inputs, outputs, etc.
 
 ## License
 
