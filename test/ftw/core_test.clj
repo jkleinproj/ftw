@@ -8,7 +8,7 @@
   (csv/read-csv "test"))
 
 ; reads in the csv file
-(with-open [reader (io/reader "/Users/michaelbakshandeh/Downloads/stats230/projectdata/mygolfdata.csv")]
+(with-open [reader (io/reader "mygolfdata.csv")]
   (doall
     (csv/read-csv reader)))
 
@@ -21,7 +21,7 @@
        (rest csv-data)))
 
 ; runs the traditional dictionary structure on csv-data
-(csv-data->maps (with-open [reader (io/reader "/Users/michaelbakshandeh/Downloads/stats230/projectdata/mygolfdata.csv")]
+(csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
                   (doall
                     (csv/read-csv reader))))
 
