@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9199e5d7-8179-4205-b0ae-236aab6c029c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/ftw.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/main.clj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="9199e5d7-8179-4205-b0ae-236aab6c029c" name="Default Changelist" comment="adding lein project">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ftw.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ftw.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/ftw/core_test.clj" beforeDir="false" afterPath="$PROJECT_DIR$/test/ftw/core_test.clj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ftw/core.clj" beforeDir="false" afterPath="$PROJECT_DIR$/src/ftw/core.clj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +26,20 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
+  <component name="ReplState" timestamp="1586185475462">{:repl-history {:ide [], :local [], :remote []}}</component>
   <component name="RunManager">
+    <configuration name="Unnamed" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false" nameIsGenerated="true">
+      <module name="ftw" />
+      <setting name="replType" value="NREPL" />
+      <setting name="execution" value="LEININGEN" />
+      <setting name="jvmArgs" value="" />
+      <setting name="parameters" value="" />
+      <setting name="workingDir" value="$PROJECT_DIR$" />
+      <setting name="profiles" value="" />
+      <setting name="aliases" value="" />
+      <setting name="fixLineNumbers" value="false" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
       <setting name="replType" value="NREPL" />
       <setting name="execution" value="LEININGEN" />
@@ -87,22 +95,28 @@
     <option name="LAST_COMMIT_MESSAGE" value="adding lein project" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="378" y="232" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585854602447">
+      <screen x="0" y="23" width="1920" height="990" />
+    </state>
+    <state x="378" y="232" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.123.1440.877/0.23.1920.990@0.23.1920.990" timestamp="1585854602447" />
     <state x="823" y="418" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1585681959619">
       <screen x="0" y="23" width="1920" height="990" />
     </state>
     <state x="823" y="418" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/1920.123.1440.877/0.23.1920.990@0.23.1920.990" timestamp="1585681959619" />
-    <state x="344" y="52" key="CommitChangelistDialog2" timestamp="1585252823571">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="459" y="84" key="CommitChangelistDialog2" timestamp="1586121445795">
+      <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state x="344" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1585252823571" />
+    <state x="459" y="84" key="CommitChangelistDialog2/1920.123.1440.821/0.23.1920.1057@0.23.1920.1057" timestamp="1586121445795" />
     <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1585252826956">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1585252826956" />
-    <state x="664" y="355" key="com.intellij.ide.util.TipDialog" timestamp="1585682020689">
-      <screen x="0" y="23" width="1920" height="990" />
+    <state x="664" y="377" key="com.intellij.ide.util.TipDialog" timestamp="1586119191896">
+      <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state x="664" y="355" key="com.intellij.ide.util.TipDialog/1920.123.1440.877/0.23.1920.990@0.23.1920.990" timestamp="1585682020689" />
+    <state x="664" y="377" key="com.intellij.ide.util.TipDialog/1920.123.1440.814/0.23.1920.1057@0.23.1920.1057" timestamp="1586119191896" />
+    <state x="664" y="355" key="com.intellij.ide.util.TipDialog/1920.123.1440.877/0.23.1920.990@0.23.1920.990" timestamp="1585853095315" />
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1585252475346">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

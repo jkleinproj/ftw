@@ -2,15 +2,6 @@
   (:require [clojure.data.csv :as csv]
             [clojure.java.io :as io]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
-
-(with-open [reader (io/reader "/Users/michaelbakshandeh/Downloads/stats230/projectdata/mygolfdata.csv")]
-  (doall
-    csv/read-csv reader))
-
 ; reads in the csv file
 (with-open [reader (io/reader "mygolfdata.csv")]
   (doall
@@ -24,16 +15,17 @@
             repeat)
        (rest csv-data)))
 
+
 ; runs the traditional dictionary structure on csv-data
-(csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
-                  (doall
-                    (csv/read-csv reader))))
+(update (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
+                                (doall
+                                  (csv/read-csv reader)))) :ThreePutts #(Integer/parseInt %))
+
+
 
 ;; 20111113 update: handles functions of different arities
 ;; 20120829 update: packaged into the gp project
 ;; 20131115 update: eliminated use of zippers
-
-(ns gp.evolvefn)
 
 ;; This code defines and runs a genetic programming system on the problem
 ;; of finding a function that fits a particular set of [x y] pairs.
