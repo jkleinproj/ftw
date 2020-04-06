@@ -11,15 +11,35 @@
 (defn csv-data->maps [csv-data]
   (map zipmap
        (->> (first csv-data)
-            (map keyword)
-            repeat)
+            (map keyword) repeat)
        (rest csv-data)))
+
+; stores golf-data as permanent variable
+(def golf-data (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
+                                  (doall
+                                    (csv/read-csv reader)))))
 
 
 ; runs the traditional dictionary structure on csv-data
 (update (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
                                 (doall
                                   (csv/read-csv reader)))) :ThreePutts #(Integer/parseInt %))
+
+; function that iteratively maps
+(defn update-vals [map vals f]
+  (reduce #(update-in % [%2] f) map vals))
+
+
+
+; this works other than the NA values inter
+(let [key-strings ["Index","PuttingAverage",
+                   "DrivingDistance","DrivingAccuracy","ScoringAvg","Scrambling","OnePutts",
+                   "TwoPutts","ThreePutts","AvgOfficialWGR","ProximityToHole","GreensFringeInReg",
+                   "SandSave","OfficialMoney"]]
+      (map #(update-vals % (mapv keyword key-strings)
+                         (fn [param1] (Double/parseDouble param1)))
+                               (into [] golf-data)))
+(map golf-data)
 
 
 

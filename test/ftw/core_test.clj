@@ -28,6 +28,9 @@
 ; want to figure out how to get rid of the ': (row number)' column
 ; any ideas of how to do this in clojure??
 
+
+
+
 (deftest a-test
   (testing "FIXME, I fail."
     (is (= 0 1))))
