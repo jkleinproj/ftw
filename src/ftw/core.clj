@@ -83,8 +83,11 @@
 ;; just paste a vector of pairs into the definition of target-data instead.
 
 (def target-data
-  (map #(vector % (+ (* % %) % 1))
-       (range -1.0 1.0 0.1)))
+  [[1 1 1 1 1 1 1 1 1]
+  [1 1 1 1 1 1 1 1 1]
+  [2 2 2 2 2 2 2 2 2]
+  [3 3 3 3 3 3 3 3 3]
+  [4 4 4 4 4 4 4 4 4]])
 
 ;; An individual will be an expression made of functions +, -, *, and
 ;; pd (protected division), along with terminals x and randomly chosen
@@ -130,10 +133,10 @@
 
 (defn error
   [individual]
-  (let [value-function (eval (list 'fn '[x] individual))]
-    (reduce + (map (fn [[x y]]
+  (let [value-function (eval (list 'fn '[x1 x2 x3 x4 x5 x6 x7 x8] individual))]
+    (reduce + (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 y]]
                      (Math/abs
-                       (- (value-function x) y)))
+                       (- (value-function '[x1 x2 x3 x4 x5 x6 x7 x8]) y)))
                    target-data))))
 
 ;; We can now generate and evaluate random small programs, as with:
