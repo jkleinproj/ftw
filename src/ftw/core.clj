@@ -21,7 +21,7 @@
           (map #(if (or (not %)
                         (= % "NA"))
                   -5.0
-                  (read-string %))
+                  (read-string %)))
                (vals m))))
 
 (map vals-to-doubles (into [] golf-data))
@@ -103,7 +103,7 @@
 
 (defn random-terminal
   []
-  (rand-nth (list 'x (- (rand 10) 5))))
+  (rand-nth (list 'x1 'x2 'x3 'x4 'x5 'x6 'x7 'x8 (- (rand 1000) 500))))
 
 (defn random-code
   [depth]
