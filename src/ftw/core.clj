@@ -79,6 +79,14 @@
 (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
      golf-data)
 
+; extracts values from golf data and then converts into a vector of vectors
+(defn myfunction [golf-data]
+  (map #(into [] %) (map #(vals %) golf-data)))
+
+;; Remove unneeded key-value pairs from data
+(myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
+                  golf-data))
+
 
 
 (def target-data
