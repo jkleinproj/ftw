@@ -14,6 +14,14 @@
             (map keyword) repeat)
        (rest csv-data)))
 
+
+
+
+; stores golf-data as permanent variable
+(def golf-data (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
+                                 (doall
+                                   (csv/read-csv reader)))))
+
 ; converting NAs to doubles
 
 (defn vals-to-doubles [m]
@@ -22,18 +30,13 @@
                         (= % "NA"))
                   -5.0
                   (read-string %)))
-               (vals m))))
+               )
+  (vals m))
 
 (map vals-to-doubles (into [] golf-data))
 
 
-; stores golf-data as permanent variable
-(def golf-data (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
-                                  (doall
-                                    (csv/read-csv reader)))))
-
-
-; runs the traditional dictionary structure on csv-data
+; runs the traditional dictionary structure on golf-data
 (update (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
                                 (doall
                                   (csv/read-csv reader)))) :ThreePutts #(Integer/parseInt %))
@@ -133,7 +136,7 @@
 
 (defn error
   [individual]
-  (let [value-function (eval (list 'fn '[x1 x2 x3 x4 x5 x6 x7 x8] individual))]
+  (let [value-function (eval (list 'fn '[[x1 x2 x3 x4 x5 x6 x7 x8]] individual))]
     (reduce + (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 y]]
                      (Math/abs
                        (- (value-function '[x1 x2 x3 x4 x5 x6 x7 x8]) y)))
