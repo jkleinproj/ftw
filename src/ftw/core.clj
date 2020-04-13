@@ -14,24 +14,18 @@
             (map keyword) repeat)
        (rest csv-data)))
 
-
-
-
 ; stores golf-data as permanent variable
 (def golf-data (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
                                  (doall
                                    (csv/read-csv reader)))))
 
-; converting NAs to doubles
-
 (defn vals-to-doubles [m]
   (zipmap (keys m)
           (map #(if (or (not %)
                         (= % "NA"))
-                  -5.0
-                  (read-string %)))
-               )
-  (vals m))
+                  0.0
+                  (read-string %))
+               (vals m))))
 
 (map vals-to-doubles (into [] golf-data))
 
