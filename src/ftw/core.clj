@@ -19,16 +19,22 @@
                                  (doall
                                    (csv/read-csv reader)))))
 
+;;Converts values to doubles, except for playernames which remain strings!
 (defn vals-to-doubles [m]
   (zipmap (keys m)
           (map #(if (or (not %)
-                        (= % "NA"))
-                  0.0
+                        (= % "NA")
+                        (clojure.string/includes? % " "))
+                  (if (clojure.string/includes? % " ")
+                    %
+                    0.0)
                   (read-string %))
                (vals m))))
 
 (map vals-to-doubles (into [] golf-data))
 
+
+(comment "
 
 ; runs the traditional dictionary structure on golf-data
 (update (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
@@ -51,6 +57,7 @@
                                (into [] golf-data)))
 (map golf-data)
 
+")
 
 
 ;; 20111113 update: handles functions of different arities
