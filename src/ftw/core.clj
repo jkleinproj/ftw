@@ -15,7 +15,7 @@
        (rest csv-data)))
 
 ; stores golf-data as permanent variable
-(def golf-data (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
+(def temp-data (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
                                  (doall
                                    (csv/read-csv reader)))))
 
@@ -31,7 +31,7 @@
                   (read-string %))
                (vals m))))
 
-(map vals-to-doubles (into [] golf-data))
+(def golf-data (map vals-to-doubles (into [] temp-data)))
 
 
 (comment "
