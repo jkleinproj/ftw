@@ -37,24 +37,24 @@
 (comment "
 
 ; runs the traditional dictionary structure on golf-data
-(update (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
+(comment (update (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
                                 (doall
-                                  (csv/read-csv reader)))) :ThreePutts #(Integer/parseInt %))
+                                  (csv/read-csv reader)))) :ThreePutts #(Integer/parseInt %)))
 
 ; function that iteratively maps
-(defn update-vals [map vals f]
+#_;(defn update-vals [map vals f]
   (reduce #(update-in % [%2] f) map vals))
 
-
-
-; this works other than the NA values inter
-(let [key-strings ["Index","PuttingAverage",
-                   "DrivingDistance","DrivingAccuracy","ScoringAvg","Scrambling","OnePutts",
-                   "TwoPutts","ThreePutts","AvgOfficialWGR","ProximityToHole","GreensFringeInReg",
-                   "SandSave","OfficialMoney"]]
-      (map #(update-vals % (mapv keyword key-strings)
+(comment
+  (let [key-strings ["Index" "PuttingAverage",
+                     "DrivingDistance"," DrivingAccuracy"," ScoringAvg"," Scrambling"," OnePutts",
+                     "TwoPutts"," ThreePutts"," AvgOfficialWGR"," ProximityToHole"," GreensFringeInReg",
+                     "SandSave"," OfficialMoney"]]
+      (
+    map #(update-vals % (mapv keyword key-strings)
                          (fn [param1] (Double/parseDouble param1)))
                                (into [] golf-data)))
+  )
 (map golf-data)
 
 ")
@@ -137,15 +137,15 @@
 
 (defn error
   [individual]
-  (let [value-function (eval (list 'fn '[[x1 x2 x3 x4 x5 x6 x7 x8]] individual))]
-    (reduce + (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 y]]
+  (let [value-function (eval (list 'fn '[x1] '[x2] '[x3] '[x4] '[x5] '[x6] '[x7] '[x8] individual))]
+    (reduce + (map (fn [[x y]]
                      (Math/abs
-                       (- (value-function '[x1 x2 x3 x4 x5 x6 x7 x8]) y)))
+                       (- (value-function x) y)))
                    target-data))))
 
 ;; We can now generate and evaluate random small programs, as with:
 
-;; (let [i (random-code 3)] (println (error i) "from individual" i))
+;; (let [i (random-code 6)] (println i) (println (error i) "from individual" i))
 
 ;; To help write mutation and crossover functions we'll write a utility
 ;; function that returns a random subtree from an expression and another that
