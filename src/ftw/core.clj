@@ -36,20 +36,7 @@
 
 (comment "
 
-; runs the traditional dictionary structure on golf-data
-(comment (update (csv-data->maps (with-open [reader (io/reader "mygolfdata.csv")]
-                                (doall
-                                  (csv/read-csv reader)))) :ThreePutts #(Integer/parseInt %)))
 
-; function that iteratively maps
-#_;(defn update-vals [map vals f]
-  (reduce #(update-in % [%2] f) map vals))
-
-(comment
-  (let [key-strings ["Index" "PuttingAverage",
-                     "DrivingDistance"," DrivingAccuracy"," ScoringAvg"," Scrambling"," OnePutts",
-                     "TwoPutts"," ThreePutts"," AvgOfficialWGR"," ProximityToHole"," GreensFringeInReg",
-                     "SandSave"," OfficialMoney"]]
       (
     map #(update-vals % (mapv keyword key-strings)
                          (fn [param1] (Double/parseDouble param1)))
@@ -85,6 +72,14 @@
 ;; of 0.1, and we'll generate the target [x y] pairs algorithmically.
 ;; If you want to evolve a function to fit your own data then you could
 ;; just paste a vector of pairs into the definition of target-data instead.
+
+
+
+;; Remove unneeded key-value pairs from data
+(map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
+     golf-data)
+
+
 
 (def target-data
   [[1 1 1 1 1 1 1 1 1]

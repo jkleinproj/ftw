@@ -2,18 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9199e5d7-8179-4205-b0ae-236aab6c029c" name="Default Changelist" comment="made modifications to files">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Leiningen__org_clojure_algo_generic_0_1_2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ftw.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ftw.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mygolfdata.csv" beforeDir="false" afterPath="$PROJECT_DIR$/mygolfdata.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project.clj" beforeDir="false" afterPath="$PROJECT_DIR$/project.clj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ftw/core.clj" beforeDir="false" afterPath="$PROJECT_DIR$/src/ftw/core.clj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/ftw/core_test.clj" beforeDir="false" afterPath="$PROJECT_DIR$/test/ftw/core_test.clj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="ftw" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -31,7 +29,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
-  <component name="ReplState" timestamp="1586198538003">{:repl-history {:ide [], :local [], :remote []}}</component>
+  <component name="ReplState" timestamp="1586818911529">{:repl-history {:ide [], :local [], :remote []}}</component>
   <component name="RunManager">
     <configuration name="Unnamed" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false" nameIsGenerated="true">
       <module name="ftw" />
@@ -48,6 +46,7 @@
     <configuration default="true" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
       <setting name="replType" value="NREPL" />
       <setting name="execution" value="LEININGEN" />
+      <module name="" />
       <setting name="jvmArgs" value="" />
       <setting name="parameters" value="" />
       <setting name="workingDir" value="" />
@@ -62,6 +61,7 @@
       <setting name="replType" value="SOCKET" />
       <setting name="configType" value="SPECIFY" />
       <setting name="fixLineNumbers" value="false" />
+      <module name="" />
       <method v="2" />
     </configuration>
   </component>
