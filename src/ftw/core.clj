@@ -87,7 +87,19 @@
 (myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
                   golf-data))
 
+; small function that swaps two elements in a vector
+(defn swap [v i1 i2]
+  (assoc v i2 (v i1) i1 (v i2)))
 
+; generalizes swap function to map
+(defn swap-elements [v i1 i2]
+  (map #(swap % i1 i2) v))
+
+; final form of regression-data ready for analysis
+; swapping officialmoney and oneputts
+(def regression-data
+  (swap-elements (myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
+                                  golf-data)) 5 9))
 
 (def target-data
   [[1 1 1 1 1 1 1 1 1]
@@ -152,6 +164,7 @@
   [individual]
   (let [value-function (eval (list 'fn '[x1 x2 x3 x4 x5 x6 x7 x8] individual))]
     (reduce + (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 y]]
+                     (println (value-function x1 x2 x3 x4 x5 x6 x7 x8))
                      (Math/abs
                        (- (value-function x1 x2 x3 x4 x5 x6 x7 x8) y)))
                    target-data))))
@@ -256,13 +269,14 @@
   [popsize]
   (println "Starting evolution...")
   (loop [generation 0
-         population (sort-by-error (repeatedly popsize #(random-code 4)))]
+         population (sort-by-error (repeatedly popsize #(random-code 6)))]
     (let [best (first population)
           best-error (error best)]
       (println "======================")
       (println "Generation:" generation)
-      (println "Best error:" best-error)
       (println "Best program:" best)
+      (println "Best error:" best-error)
+
       (println "     Median error:" (error (nth population
                                                 (int (/ popsize 2)))))
       (println "     Average program size:"
