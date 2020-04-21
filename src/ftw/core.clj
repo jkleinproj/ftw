@@ -223,12 +223,32 @@
 
 ;; Finally, we'll define a function to select an individual from a sorted
 ;; population using tournaments of a given size.
-
+(comment "
 (defn select
   [population tournament-size]
   (let [size (count population)]
     (nth population
          (apply min (repeatedly tournament-size #(rand-int size))))))
+         ")
+
+
+;; Finally, we'll define a function to select and individual from a
+;; sorted population using LEXICASE SELECTION
+(defn lexicase-selection
+  "Selects an individual from the population using lexicase selection."
+  [pop argmap]
+  (loop [survivors pop
+         cases (shuffle (range (count (:errors (first pop)))))]
+    (if (or (empty? cases)
+            (empty? (rest survivors)))
+      (rand-nth survivors)
+      (let [min-err-for-case (apply min (map #(nth % (first cases))
+                                             (map :errors survivors)))]
+        (recur (filter #(= (nth (:errors %) (first cases)) min-err-for-case)
+                       survivors)
+               (rest cases))))))
+
+
 
 ;; Now we can evolve a solution by starting with a random population and
 ;; repeatedly sorting, checking for a solution, and producing a new
@@ -259,10 +279,10 @@
           (inc generation)
           (sort-by-error
             (concat
-              (repeatedly (* 1/2 popsize) #(mutate (select population 7)))
-              (repeatedly (* 1/4 popsize) #(crossover (select population 7)
-                                                      (select population 7)))
-              (repeatedly (* 1/4 popsize) #(select population 7)))))))))
+              (repeatedly (* 1/2 popsize) #(mutate (lexicase-selection population 7)))
+              (repeatedly (* 1/4 popsize) #(crossover (lexicase-selection population 7)
+                                                      (lexicase-selection population 7)))
+              (repeatedly (* 1/4 popsize) #(lexicase-selection population 7)))))))))
 
 
 ;; Run it with a population of 1000:
