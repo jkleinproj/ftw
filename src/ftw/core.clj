@@ -33,20 +33,6 @@
 
 (def golf-data (map vals-to-doubles (into [] temp-data)))
 
-
-(comment "
-
-
-      (
-    map #(update-vals % (mapv keyword key-strings)
-                         (fn [param1] (Double/parseDouble param1)))
-                               (into [] golf-data)))
-  )
-(map golf-data)
-
-")
-
-
 ;; 20111113 update: handles functions of different arities
 ;; 20120829 update: packaged into the gp project
 ;; 20131115 update: eliminated use of zippers
@@ -72,7 +58,6 @@
 ;; of 0.1, and we'll generate the target [x y] pairs algorithmically.
 ;; If you want to evolve a function to fit your own data then you could
 ;; just paste a vector of pairs into the definition of target-data instead.
-
 
 
 ;; Remove unneeded key-value pairs from data
@@ -101,22 +86,7 @@
   (swap-elements (myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
                                   golf-data)) 5 9))
 
-(def target-data
-  [[1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]
-   [1 1 1 1 1 1 1 1 1]])
+(def target-data regression-data)
 
 ;; An individual will be an expression made of functions +, -, *, and
 ;; pd (protected division), along with terminals x and randomly chosen
@@ -164,9 +134,8 @@
   [individual]
   (let [value-function (eval (list 'fn '[x1 x2 x3 x4 x5 x6 x7 x8] individual))]
     (reduce + (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 y]]
-                     (println (value-function x1 x2 x3 x4 x5 x6 x7 x8))
                      (Math/abs
-                       (- (value-function x1 x2 x3 x4 x5 x6 x7 x8) y)))
+                       (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8)) y)))
                    target-data))))
 
 ;; We can now generate and evaluate random small programs, as with:
@@ -268,8 +237,10 @@
 (defn evolve
   [popsize]
   (println "Starting evolution...")
+  (println "Testing, testing!")
   (loop [generation 0
-         population (sort-by-error (repeatedly popsize #(random-code 6)))]
+         population (sort-by-error (repeatedly popsize #(random-code 3)))]
+    (println population)
     (let [best (first population)
           best-error (error best)]
       (println "======================")
