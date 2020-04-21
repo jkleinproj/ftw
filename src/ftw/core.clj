@@ -260,7 +260,7 @@
   (println "Testing, testing!")
   (loop [generation 0
          population (sort-by-error (repeatedly popsize #(random-code 3)))]
-    (println population)
+    (println population) 
     (let [best (first population)
           best-error (error best)]
       (println "======================")
