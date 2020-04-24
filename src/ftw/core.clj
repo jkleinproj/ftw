@@ -88,6 +88,16 @@
 
 (def target-data regression-data)
 
+;;take about 25% of the data for training!
+(def training-data
+  (random-sample 0.25 target-data))
+
+;;take about 75% of the data to be used for testing later
+(def testing-data
+  (random-sample 0.75 golf-data))
+
+
+
 ;; An individual will be an expression made of functions +, -, *, and
 ;; pd (protected division), along with terminals x and randomly chosen
 ;; constants between -5.0 and 5.0. Note that for this problem the
@@ -236,7 +246,7 @@
 ;; sorted population using LEXICASE SELECTION
 (defn lexicase-selection
   "Selects an individual from the population using lexicase selection."
-  [pop argmap]
+  [pop]
   (loop [survivors pop
          cases (shuffle (range (count (:errors (first pop)))))]
     (if (or (empty? cases)
@@ -260,7 +270,7 @@
   (println "Testing, testing!")
   (loop [generation 0
          population (sort-by-error (repeatedly popsize #(random-code 3)))]
-    (println population) 
+    (println population)
     (let [best (first population)
           best-error (error best)]
       (println "======================")
@@ -273,16 +283,16 @@
       (println "     Average program size:"
                (float (/ (reduce + (map count (map flatten population)))
                          (count population))))
-      (if (< best-error 0.1) ;; good enough to count as success
+      (if (< best-error 1000000) ;; good enough to count as success
         (println "Success:" best)
         (recur
           (inc generation)
           (sort-by-error
             (concat
-              (repeatedly (* 1/2 popsize) #(mutate (lexicase-selection population 7)))
-              (repeatedly (* 1/4 popsize) #(crossover (lexicase-selection population 7)
-                                                      (lexicase-selection population 7)))
-              (repeatedly (* 1/4 popsize) #(lexicase-selection population 7)))))))))
+              (repeatedly (* 1/2 popsize) #(mutate (lexicase-selection population)))
+              (repeatedly (* 1/4 popsize) #(crossover (lexicase-selection population)
+                                                      (lexicase-selection population)))
+              (repeatedly (* 1/4 popsize) #(lexicase-selection population)))))))))
 
 
 ;; Run it with a population of 1000:
