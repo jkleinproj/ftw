@@ -90,7 +90,7 @@
 
 (comment
   "Variables are: DrivingAccuracy, PuttingAverage, Scrambling, DrivingDistance,
-  SandSave, OnePutts, OfficialMoney, GreensFringeInReg, ProximityToHole, ScoringAvg, OnePutts")
+  SandSave, OnePutts, GreensFringeInReg, ProximityToHole, ScoringAvg, OfficialMoney")
 
 ;;take about 25% of the data for training!
 (def training-data
@@ -298,6 +298,16 @@
               (repeatedly (* 1/4 popsize) #(select population 7)))))))))
 
 
-;; Run it with a population of 1000:
 
-(evolve 1000)
+
+
+;;Function for evaluating the result of the testing data
+(defn evaluate
+  (let [best (evolve 1000)
+        value-function (eval (list 'fn '[x1 x2 x3 x4 x5 x6 x7 x8] best))]
+    (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 y]]
+                     (Math/abs
+                       (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8)) y)))
+                   testing-data)))
+;;Evaluate
+(evaluate)
