@@ -146,7 +146,7 @@
     (reduce + (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 y]]
                      (Math/abs
                        (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8)) y)))
-                   target-data))))
+                   training-data))))
 
 ;; We can now generate and evaluate random small programs, as with:
 
@@ -283,7 +283,7 @@
       (println "     Average program size:"
                (float (/ (reduce + (map count (map flatten population)))
                          (count population))))
-      (if (< best-error 1000000) ;; good enough to count as success
+      (if (< best-error 600) ;; good enough to count as success
         (println "Success:" best)
         (recur
           (inc generation)
