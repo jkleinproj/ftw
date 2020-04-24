@@ -233,19 +233,18 @@
 
 ;; Finally, we'll define a function to select an individual from a sorted
 ;; population using tournaments of a given size.
-(comment "
+
 (defn select
   [population tournament-size]
   (let [size (count population)]
     (nth population
          (apply min (repeatedly tournament-size #(rand-int size))))))
-         ")
 
 
+(comment "
 ;; Finally, we'll define a function to select and individual from a
 ;; sorted population using LEXICASE SELECTION
 (defn lexicase-selection
-  "Selects an individual from the population using lexicase selection."
   [pop]
   (loop [survivors pop
          cases (shuffle (range (count (:errors (first pop)))))]
@@ -257,6 +256,7 @@
         (recur (filter #(= (nth (:errors %) (first cases)) min-err-for-case)
                        survivors)
                (rest cases))))))
+               ")
 
 
 
@@ -270,7 +270,6 @@
   (println "Testing, testing!")
   (loop [generation 0
          population (sort-by-error (repeatedly popsize #(random-code 3)))]
-    (println population)
     (let [best (first population)
           best-error (error best)]
       (println "======================")
@@ -283,16 +282,16 @@
       (println "     Average program size:"
                (float (/ (reduce + (map count (map flatten population)))
                          (count population))))
-      (if (< best-error 600) ;; good enough to count as success
+      (if (< best-error 100) ;; good enough to count as success
         (println "Success:" best)
         (recur
           (inc generation)
           (sort-by-error
             (concat
-              (repeatedly (* 1/2 popsize) #(mutate (lexicase-selection population)))
-              (repeatedly (* 1/4 popsize) #(crossover (lexicase-selection population)
-                                                      (lexicase-selection population)))
-              (repeatedly (* 1/4 popsize) #(lexicase-selection population)))))))))
+              (repeatedly (* 1/2 popsize) #(mutate (select population 7)))
+              (repeatedly (* 1/4 popsize) #(crossover (select population 7)
+                                                      (select population 7)))
+              (repeatedly (* 1/4 popsize) #(select population 7)))))))))
 
 
 ;; Run it with a population of 1000:
