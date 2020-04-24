@@ -88,6 +88,10 @@
 
 (def target-data regression-data)
 
+(comment
+  "Variables are: DrivingAccuracy, PuttingAverage, Scrambling, DrivingDistance,
+  SandSave, OnePutts, OfficialMoney, GreensFringeInReg, ProximityToHole, ScoringAvg, OnePutts")
+
 ;;take about 25% of the data for training!
 (def training-data
   (random-sample 0.25 target-data))
@@ -282,7 +286,7 @@
       (println "     Average program size:"
                (float (/ (reduce + (map count (map flatten population)))
                          (count population))))
-      (if (< best-error 100) ;; good enough to count as success
+      (if (< best-error 180) ;; good enough to count as success
         (println "Success:" best)
         (recur
           (inc generation)
