@@ -228,7 +228,7 @@
 (defn sort-by-error
   [population]
   (vec (map second
-            (sort (fn [[err1 ind1] [err2 ind2]] (> err1 err2))
+            (sort (fn [[err1 ind1] [err2 ind2]] (< err1 err2))
                   (map #(vector (error %) %) population)))))
 
 ;; Finally, we'll define a function to select an individual from a sorted
