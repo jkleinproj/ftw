@@ -1,6 +1,13 @@
 (ns ftw.core
   (:require [clojure.data.csv :as csv]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.core.matrix :as m]
+            [uncomplicate.neanderthal.native :as n]))
+
+(use 'uncomplicate.neanderthal.core)
+(use 'uncomplicate.neanderthal.linalg)
+#_(use 'uncomplicate.neanderthal.native)
+
 
 ; reads in the csv file
 (with-open [reader (io/reader "mygolfdata.csv")]
@@ -108,6 +115,12 @@
 (def testing-data
   (random-sample 0.75 golf-data))
 
+; sets up methods for ls fitness function
+
+
+(defn nested-take-last [data]
+  (into [] (map #(last %) data)))
+
 
 
 ;; An individual will be an expression made of functions +, -, *, and
@@ -159,6 +172,18 @@
                      (Math/abs
                        (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8 x9)) y)))
                    training-data))))
+
+(defn get-predictors [individual]
+  (let [value-function (eval (list 'fn '[x1 x2 x3 x4 x5 x6 x7 x8 x9] individual))]
+    (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 x9 y]]
+           (value-function x1 x2 x3 x4 x5 x6 x7 x8 x9))
+                   training-data)))
+
+(defn least-squares
+  [individual]
+  (let [predictors (get-predictors individual)
+        response (nested-take-last training-data)]
+    (ls (copy (m/matrix predictors)) (copy (m/matrix response)))))
 
 ;; We can now generate and evaluate random small programs, as with:
 
@@ -280,6 +305,7 @@
 (def training-data
   (random-sample 0.25 target-data))
 
+
 (defn evolve
   [popsize]
   (println "Starting evolution...")
@@ -322,5 +348,5 @@
                        (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8)) y)))
                    testing-data)))
 ;;Evaluate
-(evaluate)
+#_(evaluate)
 
