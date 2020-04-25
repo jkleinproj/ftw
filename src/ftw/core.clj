@@ -80,11 +80,19 @@
 (defn swap-elements [v i1 i2]
   (map #(swap % i1 i2) v))
 
+;; takes the log of the y variable for appropriate analysis
+;; defines clojure log using Java log
+(defn log [x] (Math/log x))
+
+;; takes the log of the last variable
+(defn log-last [data]
+  (map #(conj (into [] (drop-last %)) (log (last %))) data))
+
 ; final form of regression-data ready for analysis
 ; swapping officialmoney and oneputts
 (def regression-data
-  (swap-elements (myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
-                                  golf-data)) 5 9))
+  (log-last (swap-elements (myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
+                                  golf-data)) 5 9)))
 
 (def target-data regression-data)
 
@@ -119,7 +127,7 @@
 
 (defn random-terminal
   []
-  (rand-nth (list 'x1 'x2 'x3 'x4 'x5 'x6 'x7 'x8 (- (rand 1000) 500))))
+  (rand-nth (list 'x1 'x2 'x3 'x4 'x5 'x6 'x7 'x8 'x9 (- (rand 100000) 200000))))
 
 (defn random-code
   [depth]
@@ -146,10 +154,10 @@
 
 (defn error
   [individual]
-  (let [value-function (eval (list 'fn '[x1 x2 x3 x4 x5 x6 x7 x8] individual))]
-    (reduce + (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 y]]
+  (let [value-function (eval (list 'fn '[x1 x2 x3 x4 x5 x6 x7 x8 x9] individual))]
+    (reduce + (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 x9 y]]
                      (Math/abs
-                       (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8)) y)))
+                       (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8 x9)) y)))
                    training-data))))
 
 ;; We can now generate and evaluate random small programs, as with:
@@ -290,7 +298,7 @@
       (println "     Average program size:"
                (float (/ (reduce + (map count (map flatten population)))
                          (count population))))
-      (if (< best-error 180) ;; good enough to count as success
+      (if (< best-error 1800) ;; good enough to count as success
         (println "Success:" best)
         (recur
           (inc generation)
