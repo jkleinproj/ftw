@@ -73,6 +73,9 @@
 (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
      golf-data)
 
+(map #(dissoc % :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
+     t-data)
+
 ; extracts values from golf data and then converts into a vector of vectors
 (defn myfunction [golf-data]
   (map #(into [] %) (map #(vals %) golf-data)))
@@ -80,12 +83,6 @@
 ;; Remove unneeded key-value pairs from data
 (myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
                   golf-data))
-
-;; Remove unneeded key-value pairs from testing data
-(myfunction (map #(dissoc % :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
-                 t-data))
-(comment "PRINTING T DATA")
-t-data
 
 ; small function that swaps two elements in a vector
 (defn swap [v i1 i2]
@@ -105,16 +102,17 @@ t-data
 
 ; final form of regression-data ready for analysis
 ; swapping officialmoney and oneputts
+(comment "
 (def regression-data
   (log-last (swap-elements (myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
-                                  golf-data)) 5 9)))
+                                  golf-data)) 5 9)))"
+         )
 
 ;; Final form of regression-data for TESTING (Includes playernames)
-(def regression-data-two
-  (log-last (swap-elements (myfunction (map #(dissoc % :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
-                                            t-data)) 5 10)))
 
-regression-data-two
+(def regression-data
+  (swap-elements (swap-elements (swap-elements (swap-elements (log-last (swap-elements (myfunction (map #(dissoc % :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
+                                            t-data)) 5 10)) 6 7) 7 8) 8 9) 9 10))
 
 (def target-data regression-data)
 
@@ -124,11 +122,11 @@ regression-data-two
 
 ;;take about 25% of the data for training!
 (def training-data
-  (random-sample 0.25 target-data))
+  (random-sample 0.25 regression-data))
 
 ;;take about 75% of the data to be used for testing later
 (def testing-data
-  (random-sample 0.75 regression-data-two))
+  (random-sample 0.75 regression-data))
 
 ; sets up methods for ls fitness function
 
@@ -361,7 +359,7 @@ regression-data-two
     (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 y]]
                      (Math/abs
                        (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8)) y)))
-                   testing-data)))
+                   regression-data)))
 ;;Evaluate
 #_(evaluate)
 
