@@ -95,6 +95,10 @@
 (defn log-last [data]
   (map #(conj (into [] (drop-last %)) (log (last %))) data))
 
+;; takes the last variable
+(defn nested-last [data]
+  (map #(last %) data))
+
 ; final form of regression-data ready for analysis
 ; swapping officialmoney and oneputts
 (comment "
@@ -312,7 +316,7 @@
       (println "     Average program size:"
                (float (/ (reduce + (map count (map flatten population)))
                          (count population))))
-      (if (or (< best-error 250) (> generation 39)) ;; good enough to count as success
+      (if (or (< best-error 250) (> generation 29)) ;; good enough to count as success
         best
         (recur
           (inc generation)
@@ -332,9 +336,13 @@
   (let [best (evolve 1000)
         value-function (eval (list 'fn '[x1 x2 x3 x4 x5 x6 x7 x8 x9] best))]
     (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 x9 y]]
-           (println (float (value-function x1 x2 x3 x4 x5 x6 x7 x8 x9)))
-           (Math/abs
-             (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8 x9)) y)))
+           (list (float (value-function x1 x2 x3 x4 x5 x6 x7 x8 x9))
+                 y
+                 (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8 x9)) y)))
          testing-data)))
 
-#_(evaluate)
+(defn display-results []
+  (let [errors (evaluate)]
+    (interleave errors (nested-last testing-data))))
+
+#_(display-results)
