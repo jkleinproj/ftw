@@ -1,12 +1,7 @@
 (ns ftw.core
   (:require [clojure.data.csv :as csv]
             [clojure.java.io :as io]
-            [clojure.core.matrix :as m]
-            [uncomplicate.neanderthal.native :as n]))
-
-(use 'uncomplicate.neanderthal.core)
-(use 'uncomplicate.neanderthal.linalg)
-#_(use 'uncomplicate.neanderthal.native)
+            [clojure.core.matrix :as m]))
 
 
 ; reads in the csv file
@@ -114,8 +109,6 @@
   (swap-elements (swap-elements (swap-elements (swap-elements (log-last (swap-elements (myfunction (map #(dissoc % :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
                                             t-data)) 5 10)) 6 7) 7 8) 8 9) 9 10))
 
-(def target-data regression-data)
-
 (comment
   "Variables are: DrivingAccuracy, PuttingAverage, Scrambling, DrivingDistance,
   SandSave, OnePutts, GreensFringeInReg, ProximityToHole, ScoringAvg, OfficialMoney")
@@ -127,14 +120,6 @@
 ;;take about 75% of the data to be used for testing later
 (def testing-data
   (random-sample 0.75 regression-data))
-
-; sets up methods for ls fitness function
-
-
-(defn nested-take-last [data]
-  (into [] (map #(last %) data)))
-
-
 
 ;; An individual will be an expression made of functions +, -, *, and
 ;; pd (protected division), along with terminals x and randomly chosen
@@ -153,7 +138,7 @@
 
 (defn random-terminal
   []
-  (rand-nth (list 'x1 'x2 'x3 'x4 'x5 'x6 'x7 'x8 'x9 (- (rand 100000) 200000))))
+  (rand-nth (list 'x1 'x2 'x3 'x4 'x5 'x6 'x7 'x8 'x9 (- (rand 40) 20))))
 
 (defn random-code
   [depth]
@@ -191,12 +176,6 @@
     (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 x9 y]]
            (value-function x1 x2 x3 x4 x5 x6 x7 x8 x9))
                    training-data)))
-
-(defn least-squares
-  [individual]
-  (let [predictors (get-predictors individual)
-        response (nested-take-last training-data)]
-    (ls (copy (m/matrix predictors)) (copy (m/matrix response)))))
 
 ;; We can now generate and evaluate random small programs, as with:
 
@@ -314,10 +293,6 @@
 ;; repeatedly sorting, checking for a solution, and producing a new
 ;; population.
 
-;;take about 25% of the data for training!
-(def training-data
-  (random-sample 0.25 target-data))
-
 
 (defn evolve
   [popsize]
@@ -337,16 +312,16 @@
       (println "     Average program size:"
                (float (/ (reduce + (map count (map flatten population)))
                          (count population))))
-      (if (< best-error 1800) ;; good enough to count as success
-        (println "Success:" best)
+      (if (or (< best-error 250) (> generation 39)) ;; good enough to count as success
+        best
         (recur
           (inc generation)
           (sort-by-error
             (concat
-              (repeatedly (* 1/2 popsize) #(mutate (select population 7)))
-              (repeatedly (* 1/4 popsize) #(crossover (select population 7)
-                                                      (select population 7)))
-              (repeatedly (* 1/4 popsize) #(select population 7)))))))))
+              (repeatedly (* 1/2 popsize) #(mutate (select population 5)))
+              (repeatedly (* 1/4 popsize) #(crossover (select population 5)
+                                                      (select population 5)))
+              (repeatedly (* 1/4 popsize) #(select population 5)))))))))
 
 
 ;; (evolve 1000)
@@ -355,11 +330,11 @@
 ;;Function for evaluating the result of the testing data
 (defn evaluate []
   (let [best (evolve 1000)
-        value-function (eval (list 'fn '[x1 x2 x3 x4 x5 x6 x7 x8] best))]
-    (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 y]]
-                     (Math/abs
-                       (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8)) y)))
-                   regression-data)))
-;;Evaluate
-#_(evaluate)
+        value-function (eval (list 'fn '[x1 x2 x3 x4 x5 x6 x7 x8 x9] best))]
+    (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 x9 y]]
+           (println (float (value-function x1 x2 x3 x4 x5 x6 x7 x8 x9)))
+           (Math/abs
+             (- (float (value-function x1 x2 x3 x4 x5 x6 x7 x8 x9)) y)))
+         testing-data)))
 
+#_(evaluate)
