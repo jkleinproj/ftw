@@ -40,6 +40,8 @@
 
 (def golf-data (map vals-to-doubles (into [] temp-data)))
 
+(def t-data golf-data)
+
 ;; 20111113 update: handles functions of different arities
 ;; 20120829 update: packaged into the gp project
 ;; 20131115 update: eliminated use of zippers
@@ -79,6 +81,12 @@
 (myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
                   golf-data))
 
+;; Remove unneeded key-value pairs from testing data
+(myfunction (map #(dissoc % :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
+                 t-data))
+(comment "PRINTING T DATA")
+t-data
+
 ; small function that swaps two elements in a vector
 (defn swap [v i1 i2]
   (assoc v i2 (v i1) i1 (v i2)))
@@ -101,6 +109,13 @@
   (log-last (swap-elements (myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
                                   golf-data)) 5 9)))
 
+;; Final form of regression-data for TESTING (Includes playernames)
+(def regression-data-two
+  (log-last (swap-elements (myfunction (map #(dissoc % :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
+                                            t-data)) 5 10)))
+
+regression-data-two
+
 (def target-data regression-data)
 
 (comment
@@ -113,7 +128,7 @@
 
 ;;take about 75% of the data to be used for testing later
 (def testing-data
-  (random-sample 0.75 golf-data))
+  (random-sample 0.75 regression-data-two))
 
 ; sets up methods for ls fitness function
 
