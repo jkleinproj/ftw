@@ -316,7 +316,7 @@
       (println "     Average program size:"
                (float (/ (reduce + (map count (map flatten population)))
                          (count population))))
-      (if (or (< best-error 250) (> generation 29)) ;; good enough to count as success
+      (if (or (< best-error 250) (> generation 39)) ;; good enough to count as success
         best
         (recur
           (inc generation)
