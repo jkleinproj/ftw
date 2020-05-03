@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Leiningen: org.jocl/jocl-blast:1.5.0">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/jocl/jocl-blast/1.5.0/jocl-blast-1.5.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

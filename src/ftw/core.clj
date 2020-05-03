@@ -37,47 +37,9 @@
 
 (def t-data golf-data)
 
-;; 20111113 update: handles functions of different arities
-;; 20120829 update: packaged into the gp project
-;; 20131115 update: eliminated use of zippers
-
-;; This code defines and runs a genetic programming system on the problem
-;; of finding a function that fits a particular set of [x y] pairs.
-
-;; The aim here is mostly to demonstrate how genetic programming can be
-;; implemented in Clojure simply and clearly, and several things are
-;; done in somewhat inefficient and/or non-standard ways. But this should
-;; provide a reasonable starting point for developing more efficient/
-;; standard/capable systems.
-
-;; Note also that this code, as written, will not always find a solution.
-;; There are a variety of changes that one might make to improve its
-;; problem-solving performance on the given problem.
-
-;; We'll use data from x^2 + x + 1 (the problem from chapter 4 of
-;; http://www.gp-field-guide.org.uk/, although our gp algorithm won't
-;; be the same, and we'll use some different parameters as well).
-
-;; We'll use input (x) values ranging from -1.0 to 1.0 in increments
-;; of 0.1, and we'll generate the target [x y] pairs algorithmically.
-;; If you want to evolve a function to fit your own data then you could
-;; just paste a vector of pairs into the definition of target-data instead.
-
-
-;; Remove unneeded key-value pairs from data
-(map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
-     golf-data)
-
-(map #(dissoc % :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
-     t-data)
-
 ; extracts values from golf data and then converts into a vector of vectors
 (defn myfunction [golf-data]
   (map #(into [] %) (map #(vals %) golf-data)))
-
-;; Remove unneeded key-value pairs from data
-(myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
-                  golf-data))
 
 ; small function that swaps two elements in a vector
 (defn swap [v i1 i2]
@@ -98,14 +60,6 @@
 ;; takes the last variable
 (defn nested-last [data]
   (map #(last %) data))
-
-; final form of regression-data ready for analysis
-; swapping officialmoney and oneputts
-(comment "
-(def regression-data
-  (log-last (swap-elements (myfunction (map #(dissoc % :PlayerName :TwoPutts :ThreePutts :Index :Season :AvgOfficialWGR)
-                                  golf-data)) 5 9)))"
-         )
 
 ;; Final form of regression-data for TESTING (Includes playernames)
 
@@ -147,7 +101,7 @@
 (defn random-code
   [depth]
   (if (or (zero? depth)
-          (zero? (rand-int 2))) ; might want to try (rand-int (count function-table))
+          (zero? (rand-int 2)))
     (random-terminal)
     (let [f (random-function)]
       (cons f (repeatedly (get function-table f)
@@ -180,10 +134,6 @@
     (map (fn [[x1 x2 x3 x4 x5 x6 x7 x8 x9 y]]
            (value-function x1 x2 x3 x4 x5 x6 x7 x8 x9))
                    training-data)))
-
-;; We can now generate and evaluate random small programs, as with:
-
-;; (let [i (random-code 6)] (println i) (println (error i) "from individual" i))
 
 ;; To help write mutation and crossover functions we'll write a utility
 ;; function that returns a random subtree from an expression and another that
@@ -220,10 +170,6 @@
            (for [n (iterate inc 0)] (= n position-to-change))
            i))))
 
-;(replace-random-subtree '(0 (1) (2 2) (3 3 3) (4 4 4 4) (5 5 5 5 5) (6 6 6 6 6 6 6)) 'x)
-
-;(replace-random-subtree '(+ (* x (+ y z)) w) 3)
-
 (defn mutate
   [i]
   (replace-random-subtree i (random-code 2)))
@@ -233,27 +179,6 @@
 (defn crossover
   [i j]
   (replace-random-subtree i (random-subtree j)))
-
-;(crossover '(+ (* x (+ y z)) w) '(/ a (/ (/ b c) d)))
-
-; We can see some mutations with:
-; (let [i (random-code 2)] (println (mutate i) "from individual" i))
-
-; and crossovers with:
-; (let [i (random-code 2) j (random-code 2)]
-;   (println (crossover i j) "from" i "and" j))
-
-;(let [e '(* x 2)
-;      m (mutate e)]
-; (println (error e) e)
-; (println (error m) m))
-;
-;(let [e1 '(* x 2)
-;      e2 '(+ (* x 3) 4)
-;      c (crossover e1 e2)]
-; (println (error e1) e1)
-; (println (error e2) e2)
-; (println (error c) c))
 
 ;; We'll also want a way to sort a population by error that doesn't require
 ;; lots of error re-computation:
@@ -272,26 +197,6 @@
   (let [size (count population)]
     (nth population
          (apply min (repeatedly tournament-size #(rand-int size))))))
-
-
-(comment "
-;; Finally, we'll define a function to select and individual from a
-;; sorted population using LEXICASE SELECTION
-(defn lexicase-selection
-  [pop]
-  (loop [survivors pop
-         cases (shuffle (range (count (:errors (first pop)))))]
-    (if (or (empty? cases)
-            (empty? (rest survivors)))
-      (rand-nth survivors)
-      (let [min-err-for-case (apply min (map #(nth % (first cases))
-                                             (map :errors survivors)))]
-        (recur (filter #(= (nth (:errors %) (first cases)) min-err-for-case)
-                       survivors)
-               (rest cases))))))
-               ")
-
-
 
 ;; Now we can evolve a solution by starting with a random population and
 ;; repeatedly sorting, checking for a solution, and producing a new
@@ -326,9 +231,6 @@
               (repeatedly (* 1/4 popsize) #(crossover (select population 5)
                                                       (select population 5)))
               (repeatedly (* 1/4 popsize) #(select population 5)))))))))
-
-
-;; (evolve 1000)
 
 
 ;;Function for evaluating the result of the testing data
