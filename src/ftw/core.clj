@@ -221,7 +221,7 @@
       (println "     Average program size:"
                (float (/ (reduce + (map count (map flatten population)))
                          (count population))))
-      (if (or (< best-error 250) (> generation 39)) ;; good enough to count as success
+      (if (or (< best-error 200) (> generation 49)) ;; good enough to count as success
         best
         (recur
           (inc generation)
@@ -245,6 +245,11 @@
 
 (defn display-results []
   (let [errors (evaluate)]
-    (interleave errors (nested-last testing-data))))
+    (interleave (nested-last testing-data) errors)))
+
+(defn write-results []
+  (with-open [writer (io/writer "data-results.csv")]
+    (csv/write-csv writer (display-results))))
 
 #_(display-results)
+#_(write-results)
