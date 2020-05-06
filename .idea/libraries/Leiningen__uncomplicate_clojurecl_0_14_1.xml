@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: uncomplicate/clojurecl:0.14.1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/uncomplicate/clojurecl/0.14.1/clojurecl-0.14.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: org.jcuda/jcuda-natives:10.2.0:apple-x86_64">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jcuda/jcuda-natives/10.2.0/jcuda-natives-10.2.0-apple-x86_64.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
